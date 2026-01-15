@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Trufas Factory - Sweet Bakery</title>
+
+  <!-- Fuentes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* =============== RESET BÁSICO =============== */
+    :root{
+      --accent:#b86f52;
+      --text:#2d2d2d;
+      --muted:#6b6b6b;
+      --bg-overlay: rgba(0,0,0,0.45);
+      --white: #ffffff;
+      --max-width:1200px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family: 'Montserrat', system-ui, -apple-system, 'Segoe UI', Roboto, Arial;
+      color:var(--text);
+      background-color:#fff8f6;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.4;
+    }
+    a{color:inherit;text-decoration:none; font-size: large;}
+    img{display:block;max-width:100%;height:auto}
+
+    /* =============== BACKGROUND HERO (IMAGEN) =============== */
+    .hero-bg{
+      position:relative;
+      min-height:84vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+    }
+    .hero-bg::before{
+      /* Imagen de fondo principal (sustituye la ruta) */
+      content:"";
+      position:absolute;inset:0;
+      background-image: url('imagen-7.png');
+      background-size: cover;
+      background-position: center;
+      opacity:0.55;
+      z-index:0;
+      will-change:opacity,transform;
+    }
+    /* overlay para mejorar legibilidad */
+    .hero-bg::after{
+      content:"";
+      position:absolute;inset:0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.35) 35%, rgba(0,0,0,0.2) 100%);
+      z-index:1;
+    }
+
+    /* CONTAINER */
+    .container{
+      width:100%;
+      height: 100vh;
+      max-width:var(--max-width);
+      margin:0 auto;
+      padding:28px 20px;
+      position:relative;
+      z-index:2;
+    }
+
+    /* SKIP LINK */
+    .skip-link{
+      position: absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;
+    }
+    .skip-link:focus{
+      position:fixed;left:12px;top:12px;width:auto;height:auto;background:#fff;padding:8px 12px;border-radius:6px;z-index:9999;box-shadow:0 6px 20px rgba(0,0,0,0.12)
+    }
+
+    /* NAV */
+    .nav{
+      display:flex;align-items:center;justify-content:space-between;padding:10px 0;
+    }
+    .brand{
+      font-family: 'Playfair Display', serif;
+      color:var(--accent);
+      font-size:30px;
+      letter-spacing:2px;
+      text-shadow:0 1px 1px white;
+    }
+    .menu{display:flex;gap:18px;align-items:center}
+    .menu a{font-size:20px;color:var(--muted);padding:8px;text-shadow: 1px 1px 1px white;}
+    .menu a:hover{color:var(--accent)}
+    .btn-shop{
+      border:1px solid var(--accent);
+      padding:8px 14px;border-radius:20px;font-weight:600;
+      background:transparent;color:var(--accent);cursor:pointer;
+    }
+
+    /* HAMBURGER - visible en pantallas pequeñas */
+    .hamburger{display:none;background:none;border:0;cursor:pointer}
+    .hamburger .bar{width:24px;height:2px;background:#6b6b6b;margin:4px 0;border-radius:2px}
+
+    /* HERO LAYOUT */
+    .hero{
+      display:grid;
+      grid-template-columns:1fr 520px;
+      gap:28px;
+      align-items:center;
+      padding:28px 0 48px;
+    }
+    .hero-left{padding:18px;color:var(--white);z-index:2}
+    .kicker{font-size:13px;color:#ffe6da;font-weight:600;margin-bottom:6px}
+    h1{
+      font-family: 'Playfair Display', serif;
+      font-size:64px;line-height:0.95;
+      color:var(--white);
+      margin-bottom:12px;
+      text-shadow:2px 4px 12px rgba(0,0,0,0.45);
+    }
+    .subtitle{
+      font-size:15px;color:rgba(255,255,255,0.92);margin-bottom:18px;max-width:640px;
+    }
+    .address{margin-top:14px;color:#f0b097;font-size:20px;font-weight:700}
+
+    /* CIRCLE IMAGE FRAME (TRUFA) */
+    .hero-right{display:flex;justify-content:center;align-items:center;position:relative;z-index:2}
+    .circle-frame{
+      width:420px;height:420px;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;
+      border:10px solid var(--white);
+      box-shadow:0 18px 40px rgba(0,0,0,0.28);
+      background:linear-gradient(180deg,#fff,#fffaf8);
+    }
+    .circle-frame img{width:auto;height:120%;object-fit:cover;transform:translateY(-6%)}
+
+    /* SOCIAL ICONS */
+    .socials{display:flex;gap:12px;margin-top:22px}
+    .socials a{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.85);box-shadow:0 2px 6px rgba(0,0,0,0.06)}
+    .socials svg{width:18px;height:18px;fill:var(--accent)}
+
+    /* MOBILE NAV OVERLAY */
+    .mobile-nav{position:fixed;inset:0;background:rgba(0,0,0,0.45);display:none;align-items:flex-start;justify-content:flex-end;padding-top:56px;z-index:999}
+    .mobile-panel{width:260px;background:#fff;padding:22px;height:100%;box-shadow:-12px 0 40px rgba(0,0,0,0.12)}
+    .mobile-panel a{display:block;padding:12px 0;color:#444;text-decoration:none;border-bottom:1px solid #f1f1f1}
+
+    /* =============== RESPONSIVE =============== */
+    @media (max-width:1024px){
+      .hero{grid-template-columns:1fr 420px}
+      .circle-frame{width:360px;height:360px}
+    }
+    @media (max-width:820px){
+      
+      .hero{grid-template-columns:1fr;gap:20px;padding-top:8px}
+      .hero-right{order:2}
+      .circle-frame{width:320px;height:320px;margin:0 auto}
+      h1{font-size:44px}
+      .subtitle{max-width:100%}
+      /* evitar background-attachment fijo en móviles (mejora performance) */
+      .hero-bg::before{background-attachment: scroll}
+    }
+    @media (max-width:480px){
+      .container{padding:18px}
+      h1{font-size:32px}
+      .circle-frame{width:260px;height:260px}
+      .brand{font-size:20px}
+      .btn-shop{padding:6px 10px}
+    }
+
+    /* formulario */
+    /* ===============================
+   SECCIÓN DE PEDIDO
+================================ */
+.order-section {
+  background-color: #fffaf8;
+  padding: 5px 20px;
+}
+
+.order-container {
+  max-width: 520px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  padding: 20px 32px;
+  border-radius: 16px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* Títulos */
+.order-container h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 36px;
+  color: #b86f52;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.order-description {
+  font-size: 15px;
+  color: #6b6b6b;
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+/* ===============================
+   FORMULARIO
+================================ */
+.order-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2d2d2d;
+  margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group select {
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: 1px solid #d9d9d9;
+  font-size: 14px;
+  font-family: 'Montserrat', sans-serif;
+  background-color: #ffffff;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #b86f52;
+  box-shadow: 0 0 0 2px rgba(184, 111, 82, 0.15);
+}
+
+/* ===============================
+   BOTÓN
+================================ */
+.btn-submit {
+  margin-top: 10px;
+  padding: 14px;
+  border-radius: 30px;
+  border: none;
+  background-color: #b86f52;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-submit:hover {
+  background-color: #a35f45;
+  transform: translateY(-1px);
+}
+
+/* ===============================
+   RESPONSIVE
+================================ */
+@media (max-width: 480px) {
+  .order-container {
+    padding: 32px 20px;
+  }
+
+  .order-container h2 {
+    font-size: 28px;
+  }
+}
+
+  </style>
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Saltar al contenido</a>
+
+  <header class="hero-bg" role="banner" aria-label="Sección principal con imagen de fondo">
+    <div class="container">
+      <!-- NAV -->
+      <nav class="nav" role="navigation" aria-label="Navegación principal">
+        <div class="brand">Diego's Trugas</div>
+
+        <div class="menu" role="menubar" aria-label="Enlaces principales">
+          <a role="menuitem" href="index.html">Home</a>
+          <a role="menuitem" href="productos.html">Productos</a>
+          <a role="menuitem" href="ventas.html">Ventas</a>
+          
+         
+
+        <button id="hamburger" class="hamburger" aria-expanded="false" aria-controls="mobileNav" aria-label="Abrir menú">
+          <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+        </button>
+      </nav>
+
+    
+        <section class="order-section" aria-labelledby="order-title">
+  <div class="order-container">
+
+    <h2 id="order-title">Compra tus trufas</h2>
+    <p class="order-description">
+      Completa el formulario y selecciona tu trufa favorita. Nos pondremos en contacto contigo para confirmar tu pedido.
+    </p>
+
+    <form class="order-form" action="#" method="post">
+
+      <!-- Nombre -->
+      <div class="form-group">
+        <label for="name">Nombre completo</label>
+        <input 
+          type="text" 
+          id="name" 
+          name="name" 
+          placeholder="Ej. Diego Martínez"
+          required>
+      </div>
+
+      <!-- Correo -->
+      <div class="form-group">
+        <label for="email">Correo electrónico</label>
+        <input 
+          type="email" 
+          id="email" 
+          name="email" 
+          placeholder="ejemplo@correo.com"
+          required>
+      </div>
+
+      <!-- Producto -->
+      <div class="form-group">
+        <label for="product">Selecciona tu trufa</label>
+        <select id="product" name="product" required>
+          <option value="">-- Elige una opción --</option>
+          <option value="galleta-chispas">
+            Trufa de galleta con chispas de chocolate
+          </option>
+          <option value="chocolate-amargo">
+            Trufa de chocolate amargo con cacao
+          </option>
+        </select>
+      </div>
+
+      <!-- Botón -->
+      <button type="submit" class="btn-submit">
+        Realizar pedido
+      </button>
+
+    </form>
+
+  </div>
+</section>
+
+     
+    </div>
+  </header>
+
+  <!-- MOBILE NAV OVERLAY -->
+  <div class="mobile-nav" id="mobileNav" aria-hidden="true" tabindex="-1">
+    <div class="mobile-panel" role="menu" aria-label="Menu movil">
+      <a role="menuitem" href="#">Home</a>
+      <a role="menuitem" href="#">Service</a>
+      <a role="menuitem" href="#">Products</a>
+      <a role="menuitem" href="#">About Us</a>
+      <a role="menuitem" href="#">Contact Us</a>
+      <a href="#" style="margin-top:12px"><button style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--accent);background:#fff;color:var(--accent);font-weight:700">SHOP NOW</button></a>
+    </div>
+  </div>
+
+  
+</body>
+</html>
